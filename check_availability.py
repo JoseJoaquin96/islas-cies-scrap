@@ -60,7 +60,7 @@ NAVIERA_INDEX = 1
 
 TARGET_YEAR = 2026
 TARGET_MONTH_NAME = "Agosto"      # tal como aparece en el calendario
-TARGET_DAYS = [9, 10, 11, 12, 13, 14, 15]
+TARGET_DAYS = [9, 10, 11, 12, 13, 14]
 
 STATE_FILE = Path("state.json")
 DEBUG_DIR = Path("debug")
