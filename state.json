@@ -1,0 +1,36 @@
+{
+  "last_check": "2026-07-13T11:23:01",
+  "available_days": [
+    "15"
+  ],
+  "raw_results": {
+    "9": {
+      "plazas_libres": 0,
+      "disponible": false
+    },
+    "10": {
+      "plazas_libres": 0,
+      "disponible": false
+    },
+    "11": {
+      "plazas_libres": 0,
+      "disponible": false
+    },
+    "12": {
+      "plazas_libres": 0,
+      "disponible": false
+    },
+    "13": {
+      "plazas_libres": 0,
+      "disponible": false
+    },
+    "14": {
+      "plazas_libres": 0,
+      "disponible": false
+    },
+    "15": {
+      "plazas_libres": 72,
+      "disponible": true
+    }
+  }
+}
