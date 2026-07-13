@@ -85,7 +85,7 @@ def go_to_calendar(page, debug=False):
 
     for attempt in range(1, MAX_NAV_ATTEMPTS + 1):
         log(f"Intento {attempt}/{MAX_NAV_ATTEMPTS} de navegar a la ficha de Visitantes...")
-        page.goto(BASE_URL, wait_until="networkidle", timeout=45000)
+        page.goto(BASE_URL, wait_until="domcontentloaded", timeout=30000)
 
         try:
             page.get_by_role("link", name=VISITOR_TYPE).first.wait_for(
@@ -99,16 +99,6 @@ def go_to_calendar(page, debug=False):
             (DEBUG_DIR / "01_home.html").write_text(page.content(), encoding="utf-8")
 
         visitantes_links = page.get_by_role("link", name=VISITOR_TYPE)
-        if visitantes_links.count() == 0:
-            log("  No se encontró el enlace de Visitantes inmediatamente; esperando hasta 10s...")
-            try:
-                page.get_by_role("link", name=VISITOR_TYPE).first.wait_for(
-                    state="visible", timeout=10000
-                )
-            except PWTimeout:
-                pass
-            visitantes_links = page.get_by_role("link", name=VISITOR_TYPE)
-
         count = visitantes_links.count()
         if count <= ISLAND_INDEX:
             log(f"  No se encontraron suficientes enlaces '{VISITOR_TYPE}' ({count}); reintentando...")
@@ -124,15 +114,9 @@ def go_to_calendar(page, debug=False):
         except Exception:
             pass
 
-        link = visitantes_links.nth(ISLAND_INDEX)
-        try:
-            link.scroll_into_view_if_needed()
-            link.click(timeout=10000)
-        except Exception:
-            log("  Click normal en Visitantes falló; intentando click forzado...")
-            link.click(force=True, timeout=10000)
-
-        page.wait_for_timeout(3000)
+        visitantes_links.nth(ISLAND_INDEX).click()
+        page.wait_for_load_state("domcontentloaded")
+        page.wait_for_timeout(1500)
 
         # ¿Navegó de verdad? Comprobamos con la migaja de pan
         # "Vostede atópase en: Illas Cíes" o con el propio campo de
