@@ -2,28 +2,22 @@ name: Comprobar disponibilidad Illas Cíes
 
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '*/5 * * * *'
   workflow_dispatch:
     inputs:
       inspect:
-        description: 'Ejecutar en modo --inspect (guarda capturas de depuración)'
+        description: 'Ejecutar en modo --inspect'
         required: false
         default: 'false'
-
-permissions:
-  contents: write
-  actions: write
-
 
 jobs:
   check:
     runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
 
@@ -32,35 +26,11 @@ jobs:
           pip install -r requirements.txt
           playwright install --with-deps chromium
 
-      - name: Ejecutar comprobación (modo normal)
-        if: ${{ github.event.inputs.inspect != 'true' }}
+      - name: Ejecutar comprobación
         env:
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
-          SMTP_USE_SSL: ${{ secrets.SMTP_USE_SSL }}
         run: python check_availability.py
-
-      - name: Ejecutar en modo inspección
-        if: ${{ github.event.inputs.inspect == 'true' }}
-        env:
-          SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
-          SMTP_PORT: ${{ secrets.SMTP_PORT }}
-          SMTP_USER: ${{ secrets.SMTP_USER }}
-          SMTP_PASS: ${{ secrets.SMTP_PASS }}
-          EMAIL_TO: ${{ secrets.EMAIL_TO }}
-          SMTP_USE_SSL: ${{ secrets.SMTP_USE_SSL }}
-        run: python check_availability.py --inspect
-
-      - name: Guardar estado (para no repetir avisos)
-        if: ${{ github.event.inputs.inspect != 'true' }}
-        run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          # Evitar el mensaje de git sobre archivos ignorados y forzar el add
-          git config advice.addIgnoredFile false
-          git add -f state.json
-          git diff --staged --quiet || git commit -m "Actualiza estado de disponibilidad [skip ci]"
-          git push
