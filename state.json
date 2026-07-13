@@ -1,5 +1,5 @@
 {
-  "last_check": "2026-07-13T11:23:01",
+  "last_check": "2026-07-13T14:45:35",
   "available_days": [
     "15"
   ],
@@ -29,7 +29,7 @@
       "disponible": false
     },
     "15": {
-      "plazas_libres": 72,
+      "plazas_libres": 7,
       "disponible": true
     }
   }
