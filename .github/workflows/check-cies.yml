@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -51,15 +51,6 @@ jobs:
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
           SMTP_USE_SSL: ${{ secrets.SMTP_USE_SSL }}
         run: python check_availability.py --inspect
-
-      - name: Subir capturas de depuración
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: debug-${{ github.run_number }}
-          path: debug/
-          if-no-files-found: ignore
-          retention-days: 5
 
       - name: Guardar estado (para no repetir avisos)
         if: ${{ github.event.inputs.inspect != 'true' }}
