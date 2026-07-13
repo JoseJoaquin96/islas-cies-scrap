@@ -2,8 +2,8 @@ name: Comprobar disponibilidad Illas Cíes
 
 on:
   schedule:
-    # Cada 20 minutos. Ajusta a tu gusto (cuidado con no abusar del servidor público).
-    - cron: "*/20 * * * *"
+    # Cada 8 minutos. Ajusta a tu gusto (cuidado con no abusar del servidor público).
+    - cron: "*/8 * * * *"
   workflow_dispatch:
     inputs:
       inspect:
